@@ -64,6 +64,10 @@ jobs:
             codesign --force --deep -s - dist/ovpn_keypass_gui
           fi
 
+      - name: Add Gatekeeper README (macOS)
+        if: matrix.platform == 'macos'
+        run: cp packaging/macos-README.txt dist/README.txt
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
