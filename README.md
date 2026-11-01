@@ -79,6 +79,18 @@ pyinstaller --onefile --windowed ovpn_keypass_gui.py
 
 The resulting binary will be in `dist/`.
 
+### Automated builds (GitHub Actions)
+
+[`.github/workflows/build.yml`](.github/workflows/build.yml) builds
+standalone CLI and GUI binaries for Windows, Linux, and macOS:
+
+- **Manually**: run the "Build standalone binaries" workflow from the
+  Actions tab (or `gh workflow run build.yml`) — the three per-OS
+  binaries are attached as downloadable workflow artifacts.
+- **On a release**: push a tag like `v1.0.0` and the workflow also
+  creates a GitHub Release with a zip of each platform's binaries
+  attached.
+
 ## How it works
 
 - The tool looks for the inline `<key>...</key>` block in the `.ovpn`
