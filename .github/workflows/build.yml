@@ -49,6 +49,21 @@ jobs:
       - name: Build GUI binary
         run: python -m PyInstaller --onefile --windowed --name ovpn_keypass_gui ovpn_keypass_gui.py
 
+      - name: Ad-hoc code sign (macOS)
+        if: matrix.platform == 'macos'
+        run: |
+          # These binaries aren't notarized (that needs a paid Apple
+          # Developer account), so macOS still shows a Gatekeeper
+          # warning on first run (see README). Ad-hoc signing just
+          # keeps the binaries from being killed outright on Apple
+          # Silicon and is good hygiene for an unsigned build.
+          codesign --force --deep -s - dist/ovpn_keypass
+          if [ -d dist/ovpn_keypass_gui.app ]; then
+            codesign --force --deep -s - dist/ovpn_keypass_gui.app
+          else
+            codesign --force --deep -s - dist/ovpn_keypass_gui
+          fi
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:

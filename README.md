@@ -91,6 +91,35 @@ standalone CLI and GUI binaries for Windows, Linux, and macOS:
   creates a GitHub Release with a zip of each platform's binaries
   attached.
 
+### macOS security warning
+
+The released macOS binaries are only ad-hoc signed, not notarized by
+Apple (that requires a paid Apple Developer account), so on first run
+Gatekeeper will refuse to open them with a message like:
+
+> "ovpn_keypass_gui" cannot be opened because Apple could not verify
+> it is free of malware that may harm your Mac or compromise your
+> privacy.
+
+This isn't specific to this tool — it's standard macOS behavior for
+any app downloaded from outside the App Store that isn't notarized.
+To run it anyway, either:
+
+- **Terminal (recommended, works every time):** clear the quarantine
+  flag the browser set on download:
+
+  ```bash
+  xattr -cr ovpn_keypass_gui.app   # or: xattr -cr ovpn_keypass
+  ```
+
+- **System Settings:** try to open the app once (it will be blocked),
+  then go to **System Settings → Privacy & Security**, scroll down to
+  the blocked-app notice, and click **Open Anyway**.
+
+Or avoid the warning entirely by building from source instead of
+downloading the release binary — see "Command-line usage" / "GUI
+usage" above.
+
 ## How it works
 
 - The tool looks for the inline `<key>...</key>` block in the `.ovpn`
