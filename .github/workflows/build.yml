@@ -68,12 +68,21 @@ jobs:
         with:
           path: artifacts
 
+      - name: Restore executable permissions
+        run: |
+          # actions/upload-artifact does not reliably preserve the
+          # executable bit, so set it explicitly before zipping.
+          find artifacts -type f \( \
+            -name "ovpn_keypass" -o -name "ovpn_keypass.exe" \
+            -o -name "ovpn_keypass_gui" -o -name "ovpn_keypass_gui.exe" \
+          \) -exec chmod +x {} +
+
       - name: Package per-platform archives
         run: |
           cd artifacts
           for dir in */; do
             name="${dir%/}"
-            (cd "$name" && zip -r "../${name}.zip" .)
+            (cd "$name" && zip -r -y "../${name}.zip" .)
           done
 
       - name: Create release
